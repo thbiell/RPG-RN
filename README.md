@@ -13,22 +13,7 @@ Este projeto foi desenvolvido como aplicativo móvel usando React Native. Ele in
 - Colete missões para ganhar mais experiência e subir de nível.
 - Acompanhe o progresso do seu personagem à medida que ele ganha experiência e sobe de nível.
 
-## Capturas de Tela
-
-![Tela de Início]!(imagesReadme/image.png)
-*Tela de Início:Saudações!!.*
-
-![Tela home]!(imagesReadme/image2.png)
-*Tela home: Gerencie seu avatar, conclua ou crie novas tarefas.*
-
-![Tarefas]!(imagesReadme/image3.png)
-*Tarefas: Gerencie suas tarefas pendentes e marque-as como concluídas.*
-
-![Seleção de Personagem]!(imagesReadme/image4.png)
-*Seleção de Personagem: Escolha seu personagem, nome e cria sua história.*
-
-![Criar tarefas]!(imagesReadme/image5.png)
-*Criar tarefa: Crie suas tarefas, escolha o período, e a experiência.*
+*Todas as imagens foram feitas por interligencia artificial.
 
 
 ## Vídeo de Demonstração
