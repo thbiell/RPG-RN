@@ -1,26 +1,19 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, StyleSheet, ImageBackground, FlatList, Pressable } from 'react-native';
-import { useDispatch, useSelector } from 'react-redux';
-import axios from 'axios';
-
-import { deleteMission, markMissionAsDone } from './api'; // Importe as funções para interagir com a API
-import { selectCharacter } from './actions'; // Importe a ação para selecionar o personagem
+import { useStore } from '../../../store'; 
+import { fetchMissions, markMissionAsDone, deleteMission, fetchCharacter } from '../../../api';
 
 const Tasks = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const character = useSelector((state) => state.character); // Obter informações do personagem do Redux
-
-  const [missions, setMissions] = useState([]);
+  const store = useStore(); 
 
   useEffect(() => {
-    // Carregar missões quando a tela for montada
     loadMissions();
   }, []);
 
   const loadMissions = async () => {
     try {
-      const response = await axios.get('/mission/get-all');
-      setMissions(response.data.Missions);
+      const missions = await fetchMissions();
+      store.setMissions(missions);
     } catch (error) {
       console.error('Erro ao carregar missões:', error);
     }
@@ -29,22 +22,36 @@ const Tasks = ({ navigation }) => {
   const handleMarkAsDone = async (missionId) => {
     try {
       await markMissionAsDone(missionId);
-      loadMissions(); // Recarregar missões após marcar como concluídas
+      loadMissions();
+      await loadCharacterFromApi();
     } catch (error) {
       console.error('Erro ao marcar missão como concluída:', error);
     }
   };
-
   const handleDeleteMission = async (missionId) => {
     try {
       await deleteMission(missionId);
-      loadMissions(); // Recarregar missões após excluir
+      loadMissions();
+      loadCharacterFromApi();
     } catch (error) {
       console.error('Erro ao excluir missão:', error);
     }
   };
-
-  // Renderizar cada missão em um item da lista
+  const loadCharacterFromApi = async () => {
+    try {
+      const characterData = await fetchCharacter();
+      characterData.image = store.character.image;
+      while (characterData.exp >= characterData.needed) {
+        characterData.level += 1;
+        characterData.exp -= characterData.needed;
+        characterData.needed = (characterData.level + 1) * 100;
+      }
+      store.setCharacter(characterData);
+    } catch (error) {
+      console.error('Erro ao carregar o personagem da API:', error);
+    }
+  };
+  
   const renderItem = ({ item }) => (
     <View style={styles.missionItem}>
       <Text>{item.name}</Text>
@@ -62,12 +69,12 @@ const Tasks = ({ navigation }) => {
   return (
     <ImageBackground source={require('../../assets/Images/Missoes.png')} style={styles.backgroundImage}>
       <View style={styles.container}>
-        <Text>Nome do Personagem: {character.name}</Text>
-        <Text>Nível: {character.level}</Text>
-        <Text>Experiência: {character.exp}</Text>
-        <Text>Experiência Necessária para Próximo Nível: {character.needed}</Text>
+        <Text>Nome do Personagem: {store.character.name}</Text>
+        <Text>Nível: {store.character.level}</Text>
+        <Text>Experiência: {store.character.exp}</Text>
+        <Text>Experiência Necessária para Próximo Nível: {store.character.needed}</Text>
         <FlatList
-          data={missions}
+          data={store.missions}
           renderItem={renderItem}
           keyExtractor={(item) => item.id.toString()}
         />

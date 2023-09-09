@@ -1,37 +1,64 @@
-import React from 'react';
-import { View, StyleSheet, ImageBackground, Text, Image } from 'react-native';
-import { useSelector } from 'react-redux';
+import React, { useEffect } from 'react';
+import { View, StyleSheet, ImageBackground, Text, Pressable, Image } from 'react-native';
+import { useStore } from '../../../store';
 
 const Home = ({ navigation }) => {
-  const character = useSelector((state) => state.character);
+  const character = useStore((state) => state.character);
+  const loadCharacterFromApi = useStore((state) => state.loadCharacterFromApi);
+  const expPercentage = (character.exp / character.needed) * 100;
+
+  useEffect(() => {
+    loadCharacterFromApi();
+  }, []);
 
   return (
     <View style={styles.container}>
       <ImageBackground
-        source={require('../../assets/Images/imagem1.png')} // Altere para a imagem desejada
+        source={require('../../assets/Images/imagem2.png')}
         style={styles.backgroundImage}
       >
         <View style={styles.overlay}>
-          {/* Conteúdo da tela vai aqui */}
           <View style={styles.content}>
-            <Text style={styles.characterName}>{character.name}</Text>
+            <Text style={styles.characterName}>
+              {character.name}
+            </Text>
             <View style={styles.levelContainer}>
-              <Text>Level</Text>
+              <Text style={styles.TextLevel}>Level</Text>
               <Text style={styles.level}>{character.level}</Text>
+              <View style={styles.progressContainer}>
+                <View
+                  style={[
+                    styles.progressBar,
+                    { width: '100%' }
+                  ]}
+                ></View>
+                <View
+                  style={[
+                    styles.progressBar,
+                    styles.progressBar2,
+                    { width: `${expPercentage}%` }
+                  ]}
+                ></View>
+              </View>
             </View>
-            <Image source={character.avatarSource} style={styles.avatar} />
-            <Pressable
-              style={styles.button}
-              onPress={() => navigation.navigate('Tasks')}
-            >
-              <Text style={styles.buttonText}>Minhas Tarefas</Text>
-            </Pressable>
-            <Pressable
-              style={styles.button}
-              onPress={() => navigation.navigate('NewTask')}
-            >
-              <Text style={styles.buttonText}>Adicionar Tarefa</Text>
-            </Pressable>
+            <Image
+              source={character.image}
+              style={styles.avatar}
+            />
+            <View style={styles.direction}>
+              <Pressable
+                style={styles.button}
+                onPress={() => navigation.navigate('Tarefas')}
+              >
+                <Text style={styles.buttonText}>Minhas Tarefas</Text>
+              </Pressable>
+              <Pressable
+                style={styles.button}
+                onPress={() => navigation.navigate('Nova Tarefa')}
+              >
+                <Text style={styles.buttonText}>Adicionar Tarefa</Text>
+              </Pressable>
+            </View>
           </View>
         </View>
       </ImageBackground>
@@ -47,19 +74,37 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: 'cover',
   },
-  overlay: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Cor de overlay
-  },
   content: {
     alignItems: 'center',
+  },
+  progressContainer: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+    width: 250,
+    
+  },
+  progressBar: {
+    flex: 1,
+    height: 10,
+    backgroundColor: '#3f5739',
+    borderRadius: 5,
+    marginTop: 10,
+    marginLeft: 5,
+  },
+  progressBar2: {
+    backgroundColor: '#ff9900', 
+    position: 'absolute', 
+    height: 10,
+    borderRadius: 5,
+    marginTop: 10,
+    marginLeft: 5,
   },
   characterName: {
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 10,
+    marginTop: 40,
   },
   levelContainer: {
     flexDirection: 'row',
@@ -71,20 +116,29 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginLeft: 5,
   },
+  TextLevel:{
+    fontSize: 17,
+    fontWeight: 'bold', 
+  },
   avatar: {
-    width: 100,
-    height: 100,
+    width: 300,
+    height: 300,
     borderRadius: 50,
-    marginBottom: 20,
+    marginTop: 20,
   },
   button: {
-    backgroundColor: 'blue',
+    backgroundColor: '#3f5739',
     padding: 10,
     borderRadius: 5,
-    marginBottom: 10,
+    elevation: 5,
+    marginHorizontal: 22,
   },
   buttonText: {
     color: 'white',
+  },
+  direction: {
+    flexDirection: 'row',
+    marginTop: 250,
   },
 });
 
