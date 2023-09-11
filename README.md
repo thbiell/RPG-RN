@@ -18,7 +18,7 @@ Este projeto foi desenvolvido como aplicativo móvel usando React Native. Ele in
 
 ## Vídeo de Demonstração
 
-[![Vídeo de Demonstração](https://img.youtube.com/vi/50NE66-QC-k/0.jpg)](https://www.youtube.com/watch?v=50NE66-QC-k)
+[![Vídeo de Demonstração](https://img.youtube.com/vi/50NE66-QC-k/0.jpg)](https://drive.google.com/file/d/1Zi9rtNqWtQ2fU0-1wmVSz8enIVsLLUXn/view?usp=sharing)
 
 (Clique na imagem acima para assistir ao vídeo)
 
